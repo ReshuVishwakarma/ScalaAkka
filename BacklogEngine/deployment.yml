@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mtrc-upbe-backlogengine-{PROFILE}
+  namespace: {NAMESPACE}
+  labels:
+    app: mtrc-upbe-backlogengine-{PROFILE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mtrc-upbe-backlogengine-{PROFILE}
+  template:
+    metadata:
+      labels:
+        app: mtrc-upbe-backlogengine-{PROFILE}
+        actorSystemName: BacklogEngine
+    spec:
+      containers:
+      - name: mtrc-upbe-backlogengine-{PROFILE}
+        image: backlogengine-{PROFILE}:{BUILD_VERSION}
+        ports:
+        # akka-management and bootstrap
+        - name: management
+          containerPort: 8558
+        - name: http
+          containerPort: 8082
+        env:
+        - name: JAVA_OPTS
+          value: "-Xms512m -Xmx1500m"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: REQUIRED_CONTACT_POINT_NR
+          value: "1"
+        resources:
+          limits:
+            memory: "2000Mi"
+            cpu: "1000m"
+          requests:
+            memory: "300Mi"
+            cpu: "250m"
