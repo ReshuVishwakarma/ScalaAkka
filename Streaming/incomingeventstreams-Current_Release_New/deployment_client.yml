@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mtrcbacklogclient-{PROFILE}
+  namespace: {NAMESPACE}
+  labels:
+    app: mtrcbacklogclient-{PROFILE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mtrcbacklogclient-{PROFILE}
+  template:
+    metadata:
+      labels:
+        app: mtrcbacklogclient-{PROFILE}
+        actorSystemName: UPBEKafkaConsumer
+    spec:
+      containers:
+      - name: mtrcbacklogclient-{PROFILE}
+        image: ../incomingeventstreams-{PROFILE}:{BUILD_VERSION}
+        ports:
+        # akka-management and bootstrap
+        - name: management
+          containerPort: 8558
+        - name: http
+          containerPort: 8080
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: REQUIRED_CONTACT_POINT_NR
+          value: "1"
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+          requests:
+            memory: "300Mi"
+            cpu: "250m"

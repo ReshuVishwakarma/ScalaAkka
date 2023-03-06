@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <logger name="code" level="info" additivity="true"> </logger>
+    <logger name="core" level="info" additivity="true"> </logger>
+    <logger name="org.apache" level="OFF"/>
+    <!-- <logger name="kafka" level="OFF"/>-->
+    <logger name="ch.qos.logback" level="error" additivity="false" />
+
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS</timestampPattern>
+                <version>[ignore]</version>
+                <levelvalue>[ignore]</levelvalue>
+            </fieldNames>
+        </encoder>
+    </appender>
+    <appender name="ASYNC-CONSOLE-APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="jsonConsoleAppender"/>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="ASYNC-CONSOLE-APPENDER"/>
+    </root>
+</configuration>

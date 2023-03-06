@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <typeAlias alias = "CommonEntity" type ="entities.CommonEntity"/>
+    </typeAliases>
+
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="com.dell.it.dsc.mtrc.config.HikariCPConnectionFactory">
+                <property name="driverClassName"   value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="jdbcUrl"        value=""/>
+                <property name="username" value=""/>
+                <property name="password" value=""/>
+                <property name="minimumIdle" value="5"/>
+                <property name="maximumPoolSize" value="100"/>
+                <property name="idleTimeout" value="10000"/>
+                <property name="maxLifetime" value="300000"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="databaseConfig/EventMapper.xml"/>
+    </mappers>
+</configuration>
